@@ -1,7 +1,10 @@
 {
   "name": "emacs-c-k",
-  "displayName": "emacs-c-k",
-  "description": "Emacs Ctrl-k",
+  "displayName": "Emacs C-k",
+  "description": "Emacs C-k & C-y",
+  "repository": { "type": "git", "url": "https://github.com/soutaro/emacs-c-k.git" },
+  "license": "MIT",
+  "publisher": "soutaro",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.51.0"
