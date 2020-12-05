@@ -1,15 +1,100 @@
 import * as assert from 'assert';
+import { suite, test, beforeEach, afterEach } from 'mocha';
 
-// You can import and use all API from the 'vscode' module
-// as well as import your extension to test it
 import * as vscode from 'vscode';
-// import * as myExtension from '../../extension';
+import { TextEditor } from 'vscode';
 
-suite('Extension Test Suite', () => {
-	vscode.window.showInformationMessage('Start all tests.');
+async function sleep(ms: number) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+  }
 
-	test('Sample test', () => {
-		assert.equal(-1, [1, 2, 3].indexOf(5));
-		assert.equal(-1, [1, 2, 3].indexOf(0));
-	});
+suite('Emacs C-k', () => {
+	let editor: TextEditor = null as any
+
+	beforeEach(async () => {
+		const doc = await vscode.workspace.openTextDocument({ content: "Hello\nworld" })
+		editor = await vscode.window.showTextDocument(doc)
+
+		await sleep(100)
+	})
+
+	afterEach(async () => {
+		await vscode.commands.executeCommand("workbench.action.closeActiveEditor")
+	})
+
+	test('kill', async () => {
+		editor.selection = new vscode.Selection(0,2,0,2)
+		await sleep(100)
+
+		await vscode.commands.executeCommand("emacs-c-k.kill")
+		await sleep(100)
+
+		assert.strictEqual("He\nworld", editor.document.getText())
+	})
+
+	test('kill->yank', async () => {
+		editor.selection = new vscode.Selection(0,2,0,2)
+		await sleep(100)
+
+		await vscode.commands.executeCommand("emacs-c-k.kill")
+		await sleep(100)
+
+		editor.selection = new vscode.Selection(1,0,1,0)
+		await sleep(100)
+
+		await vscode.commands.executeCommand("emacs-c-k.yank")
+		await sleep(100)
+
+		assert.strictEqual("He\nlloworld", editor.document.getText())
+	})
+
+	test('kill->kill', async () => {
+		editor.selection = new vscode.Selection(0,2,0,2)
+		await sleep(100)
+
+		await vscode.commands.executeCommand("emacs-c-k.kill")
+		await sleep(100)
+		await vscode.commands.executeCommand("emacs-c-k.kill")
+		await sleep(100)
+
+		assert.strictEqual("Heworld", editor.document.getText())
+	})
+
+	test('kill->kill->yank', async () => {
+		editor.selection = new vscode.Selection(0,2,0,2)
+		await sleep(100)
+
+		await vscode.commands.executeCommand("emacs-c-k.kill")
+		await sleep(100)
+		await vscode.commands.executeCommand("emacs-c-k.kill")
+		await sleep(100)
+
+		editor.selection = new vscode.Selection(0,0,0,0)
+
+		await vscode.commands.executeCommand("emacs-c-k.yank")
+		await sleep(100)
+
+		assert.strictEqual("llo\nHeworld", editor.document.getText())
+	})
+
+	test('kill->move->kill->yank', async () => {
+		editor.selection = new vscode.Selection(0,3,0,3)
+		await sleep(100)
+
+		await vscode.commands.executeCommand("emacs-c-k.kill")
+		await sleep(100)
+
+		editor.selection = new vscode.Selection(0,2,0,2)
+		await sleep(100)
+
+		await vscode.commands.executeCommand("emacs-c-k.kill")
+		await sleep(100)
+
+		editor.selection = new vscode.Selection(0,0,0,0)
+
+		await vscode.commands.executeCommand("emacs-c-k.yank")
+		await sleep(100)
+
+		assert.strictEqual("lHe\nworld", editor.document.getText())
+	})
 });
