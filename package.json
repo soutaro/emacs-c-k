@@ -1,0 +1,62 @@
+{
+  "name": "emacs-c-k",
+  "displayName": "emacs-c-k",
+  "description": "Emacs Ctrl-k",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.51.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:emacs-c-k.kill",
+    "onCommand:emacs-c-k.yank"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "emacs-c-k.yank",
+        "title": "Emacs C-K (Yank)"
+      },
+      {
+        "command": "emacs-c-k.kill",
+        "title": "Emacs C-K (Kill)"
+      }
+    ],
+    "keybindings": [
+      {
+        "key": "ctrl+k",
+        "command": "emacs-c-k.kill",
+        "when": "textInputFocus && !editorReadonly"
+      },
+      {
+          "key": "ctrl+y",
+          "command": "emacs-c-k.yank",
+          "when": "textInputFocus && !editorReadonly"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.3",
+    "@types/mocha": "^8.0.0",
+    "@types/node": "^12.11.7",
+    "@types/vscode": "^1.51.0",
+    "@typescript-eslint/eslint-plugin": "^4.1.1",
+    "@typescript-eslint/parser": "^4.1.1",
+    "eslint": "^7.9.0",
+    "glob": "^7.1.6",
+    "mocha": "^8.1.3",
+    "typescript": "^4.0.2",
+    "vscode-test": "^1.4.0"
+  }
+}
