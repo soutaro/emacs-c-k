@@ -68,7 +68,7 @@ export function activate(context: vscode.ExtensionContext) {
 				const line = editor.document.lineAt(selection.start.line)
 				const range = new vscode.Range(selection.start, line.range.end)
 				const text = editor.document.getText(range)
-				if (text.length == 0) {
+				if (text.length === 0) {
 					clipboard.append("\n")
 				} else {
 					clipboard.append(text)
