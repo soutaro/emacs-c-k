@@ -32,9 +32,9 @@
         "when": "textInputFocus && !editorReadonly"
       },
       {
-          "key": "ctrl+y",
-          "command": "emacs-c-k.yank",
-          "when": "textInputFocus && !editorReadonly"
+        "key": "ctrl+y",
+        "command": "emacs-c-k.yank",
+        "when": "textInputFocus && !editorReadonly"
       }
     ]
   },
@@ -58,5 +58,8 @@
     "mocha": "^8.1.3",
     "typescript": "^4.0.2",
     "vscode-test": "^1.4.0"
+  },
+  "dependencies": {
+    "vsce": "^1.81.1"
   }
 }
